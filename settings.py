@@ -68,11 +68,14 @@ WSGI_APPLICATION = 'jugans.wsgi.application'
 
 # ====== Database ======
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'blogdb',
+        'USER': 'juganstar',
+        'PASSWORD': 'Gerrard06',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 # ====== Password Validation ======
@@ -123,3 +126,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 PASSWORD_RESET_TIMEOUT = 86400  # 24 hours
+
+if os.getenv('DEPLOY_ENV') == 'render':
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
