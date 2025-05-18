@@ -67,27 +67,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'jugans.wsgi.application'
 
 # ====== Database ======
-if os.getenv('RENDER'):
-    # Render PostgreSQL
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True
-        )
-    }
-else:
+# ====== Database ======
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),  # Reads from .env locally or Render env vars
+        conn_max_age=600,
+        conn_health_checks=True,
+        ssl_require=True
+    )
+}
+
+# Auto-configure for Render
+if 'RENDER' in os.environ:
+    ALLOWED_HOSTS.append(os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''))
+    DEBUG = os.environ.get('DEBUG', 'False') == 'True'
     
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'blogdb',
-            'USER': 'juganstar',
-            'PASSWORD': 'Gerrard06',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    }
+    # Database optimization for Render
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
 # ====== Password Validation ======
 AUTH_PASSWORD_VALIDATORS = [
@@ -137,6 +133,3 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 PASSWORD_RESET_TIMEOUT = 86400  # 24 hours
-
-if os.getenv('DEPLOY_ENV') == 'render':
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
