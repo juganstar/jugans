@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<article class="post-detail">
+    <h1>{{ post.title }}</h1>
+    <p class="meta">
+        Published on {{ post.publish_date|date:"F d, Y" }} by {{ post.author.username }} 
+        in <a href="{% url 'blog:category_posts' post.category.slug %}">{{ post.category.name }}</a>
+    </p>
+    <div class="content">
+        {{ post.content|linebreaks }}
+    </div>
+</article>
+
+<!-- Comments Section -->
+<section class="comments">
+    <h2>Comments</h2>
+    {% if user.is_authenticated %}
+        <form method="post" class="comment-form">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn">Post Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'users:login' %}">Login</a> to post comments.</p>
+    {% endif %}
+    
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="meta">
+                <strong>{{ comment.user.username }}</strong> on {{ comment.created_date|date:"F d, Y" }}
+            </p>
+            <p>{{ comment.text }}</p>
+        </div>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}

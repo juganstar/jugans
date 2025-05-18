@@ -1,0 +1,38 @@
+<!-- templates/blog/post_review.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Posts Pending Review</h1>
+
+{% if posts %}
+<div class="review-list">
+    {% for post in posts %}
+    <div class="review-item">
+        <h3>{{ post.title }}</h3>
+        <p>Author: {{ post.author.username }}</p>
+        <p>Created: {{ post.created_date|date:"F d, Y" }}</p>
+        <div class="post-content-preview">
+            {{ post.content|truncatewords:30 }}
+        </div>
+        <div class="review-actions">
+            <form action="{% url 'blog:approve_post' post.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn approve">Approve</button>
+            </form>
+            <form action="{% url 'blog:reject_post' post.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn reject">Reject</button>
+            </form>
+            {% if post.slug %}  <!-- Check if slug exists before showing preview -->
+                <a href="{% url 'blog:post_detail' post.slug %}" class="btn preview">Preview</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="no-posts">
+    <p>No posts awaiting review.</p>
+</div>
+{% endif %}
+{% endblock %}
