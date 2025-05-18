@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# exit on error
 set -o errexit
 
+# Critical fix for Render
 pip install --upgrade pip
-pip install --force-reinstall -U setuptools
+pip install dj-database-url==2.1.0  # Explicit install
 pip install -r requirements.txt
 
 python manage.py collectstatic --noinput
