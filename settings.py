@@ -67,6 +67,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'jugans.wsgi.application'
 
 # ====== Database ======
+if os.getenv('RENDER'):
+    # Render PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True
+        )
+    }
+else:
+    
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
