@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Search Posts</h1>
+<form method="get" class="search-form">
+    {{ form.as_p }}
+    <button type="submit" class="btn">Search</button>
+</form>
+
+{% if query %}
+    <h2>Results for "{{ query }}"</h2>
+    {% if results %}
+        {% for post in results %}
+            <article class="post">
+                <h2><a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a></h2>
+                <p class="meta">
+                    Published on {{ post.publish_date|date:"F d, Y" }} by {{ post.author.username }}
+                </p>
+                <p>{{ post.content|truncatewords:30 }}</p>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
