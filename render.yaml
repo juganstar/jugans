@@ -1,8 +1,9 @@
 services:
   - type: web
     name: jugans-blog
-    runtime: docker  # Changed from python to docker
-    dockerfile: Dockerfile  # Point to your Dockerfile
+    runtime: docker
+    dockerfilePath: ./Dockerfile  # Correct key is dockerfilePath, not dockerfile
+    plan: free
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -11,6 +12,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
-        value: "False"  # Ensure debug is off in production
-    plan: free
-    healthCheckPath: /  # Recommended for Docker
+        value: "False"
+      - key: PORT
+        value: "8000"  # Tell your app to bind to this port
+    healthCheckPath: /
