@@ -16,8 +16,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY . .
 
+# Set Django settings module (important for Docker containers)
+ENV DJANGO_SETTINGS_MODULE=config.settings
+
 # Entrypoint
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 # Add this for production
-CMD ["gunicorn", "your_project.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application.wsgi:application", "--bind", "0.0.0.0:8000"]
