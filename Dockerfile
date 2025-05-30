@@ -1,4 +1,3 @@
-# Dockerfile
 FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1
@@ -14,11 +13,9 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Run differently based on environment
-CMD if [ "$DJANGO_ENV" = "production" ]; then \
-        python manage.py migrate && \
-        python manage.py collectstatic --noinput && \
-        gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}; \
-    else \
-        python manage.py runserver 0.0.0.0:8000; \
-    fi
+RUN python manage.py migrate && \
+    python manage.py collectstatic --noinput
+
+EXPOSE ${PORT:-8000}
+
+CMD gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}
