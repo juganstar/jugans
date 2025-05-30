@@ -1,22 +1,232 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Welcome to My Blog</h1>
+<div class="container">
+    <div class="header-section">
+        <div class="header-content">
+            <h1>Welcome to My Blog</h1>
+            <form method="get" action="{% url 'blog:search' %}" class="search-form">
+                <div class="search-group">
+                    <input type="text" name="query" class="search-input" 
+                           placeholder="Search posts..." value="{{ request.GET.query }}" 
+                           aria-label="Search">
+                    <button class="btn search-btn" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-{% for post in posts %}
-    <article class="post">
-        <h2><a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a></h2>
-        <p class="meta">
-            Published on {{ post.publish_date|date:"F d, Y" }} by {{ post.author.username }} 
-            in <a href="{% url 'blog:category_posts' post.category.slug %}">{{ post.category.name }}</a>
-        </p>
-        <p>{{ post.content|truncatewords:50 }}</p>
-        <a href="{% url 'blog:post_detail' post.slug %}" class="read-more">Read more</a>
-    </article>
-{% empty %}
-    <p>No posts available.</p>
-{% endfor %}
+    {% if user.is_authenticated and user.is_staff %}
+    <div class="api-alert">
+        <h4><i class="fas fa-api"></i> API Documentation</h4>
+        <p>Access our REST API endpoints:</p>
+        <ul class="api-links">
+            <li><a href="/api/docs/" target="_blank"><i class="fas fa-book"></i> Interactive API Docs</a></li>
+            <li><a href="/api/posts/" target="_blank"><i class="fas fa-newspaper"></i> Posts API</a></li>
+            <li><a href="/api/categories/" target="_blank"><i class="fas fa-tags"></i> Categories API</a></li>
+        </ul>
+    </div>
+    {% endif %}
 
-<!-- Pagination -->
-{% include 'partials/pagination.html' %}
+    <div class="posts-container">
+        {% for post in posts %}
+            <article class="post">
+                <h2 class="post-title">
+                    <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
+                </h2>
+                
+                <div class="post-content">
+                    {{ post.content|truncatewords:50|safe }}
+                </div>
+                
+                <div class="post-footer">
+                    <div class="post-meta">
+                        <span class="post-author">
+                            <i class="fas fa-user"></i> {{ post.author.username }}
+                        </span>
+                        <span class="post-date">
+                            <i class="far fa-calendar-alt"></i> {{ post.publish_date|date:"F d, Y" }}
+                        </span>
+                        <span class="post-category">
+                            <i class="fas fa-tag"></i> 
+                            <a href="{% url 'blog:category_posts' post.category.slug %}">
+                                {{ post.category.name }}
+                            </a>
+                        </span>
+                    </div>
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn read-more">
+                        Continue Reading <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="no-posts">
+                <i class="far fa-newspaper"></i>
+                <p>No posts available yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include 'partials/pagination.html' %}
+</div>
+
+<style>
+    /* Additional CSS for the new layout */
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .header-content {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .search-form {
+        max-width: 400px;
+    }
+
+    .search-group {
+        display: flex;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        border-right: none;
+        font-size: 1rem;
+    }
+
+    .search-btn {
+        border-radius: 0 var(--radius) var(--radius) 0;
+        padding: 0 1.5rem;
+    }
+
+    .post {
+        margin-bottom: 3rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .post:last-child {
+        border-bottom: none;
+    }
+
+    .post-title {
+        font-size: 1.75rem;
+        margin-bottom: 1.25rem;
+        line-height: 1.3;
+    }
+
+    .post-title a {
+        color: var(--text);
+        transition: color 0.2s ease;
+    }
+
+    .post-title a:hover {
+        color: var(--primary);
+    }
+
+    .post-content {
+        margin-bottom: 1.5rem;
+        line-height: 1.7;
+        color: var(--text-light);
+    }
+
+    .post-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .post-meta {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.875rem;
+        color: var(--text-light);
+        flex-wrap: wrap;
+    }
+
+    .post-meta span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .post-meta i {
+        font-size: 0.8rem;
+    }
+
+    .read-more {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .api-alert {
+        background-color: rgba(37, 99, 235, 0.05);
+        border-left: 4px solid var(--primary);
+        padding: 1.5rem;
+        margin-bottom: 3rem;
+        border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .api-links {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .api-links a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .no-posts {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-light);
+    }
+
+    .no-posts i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--border);
+    }
+
+    @media (max-width: 768px) {
+        .header-section {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .search-form {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .post-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .post-meta {
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
 {% endblock %}

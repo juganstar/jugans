@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
+from better_profanity import profanity
 
 
 class Category(models.Model):
@@ -11,17 +12,17 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
+
 class Post(models.Model):
     STATUS_CHOICES = [
-        ('draft', 'Draft'),  # Make sure this matches what you're filtering for
-        ('published', 'Published'),
-        ('rejected', 'Rejected'),
-    ]
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default='draft'  # Ensure new posts get this status
-    )
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+    ('rejected', 'Rejected'),
+    ('flagged', 'Flagged for Review')
+]
     
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
@@ -31,17 +32,24 @@ class Post(models.Model):
     publish_date = models.DateTimeField(default=timezone.now)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES, default='draft')
 
     def save(self, *args, **kwargs):
+        # Auto-publish if no profanity is detected
+        if not (profanity.contains_profanity(self.title) or 
+                profanity.contains_profanity(self.content)):
+            self.status = 'published'  # Auto-accept clean posts
+        else:
+            self.status = 'flagged'    # Flag for review if profanity exists
+
+        # Generate slug (keep your existing logic)
         if not self.slug:
             self.slug = slugify(self.title)
-            # Handle potential duplicates
-            original_slug = self.slug
             counter = 1
             while Post.objects.filter(slug=self.slug).exists():
-                self.slug = f"{original_slug}-{counter}"
+                self.slug = f"{slugify(self.title)}-{counter}"
                 counter += 1
+
         super().save(*args, **kwargs)
     
     class Meta:
@@ -49,6 +57,7 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

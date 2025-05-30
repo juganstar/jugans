@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 2rem auto; padding: 2rem; text-align: center;">
+    <h2>Continue with {{ provider.name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="
+            background: {% if provider.id == 'google' %}#4285F4
+                      {% elif provider.id == 'github' %}#333
+                      {% else %}#777{% endif %};
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+        ">
+            Sign In with {{ provider.name }}
+        </button>
+    </form>
+</div>
+{% endblock %}

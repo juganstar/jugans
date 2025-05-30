@@ -1,59 +1,167 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="registration-container">
-    <h2>Create Your Account</h2>
-    
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <form method="post" class="registration-form">
-        {% csrf_token %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1>Register</h1>
         
-        <div class="form-group">
-            <label>Username</label>
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="error-text">{{ form.username.errors }}</div>
-            {% endif %}
+        <!-- Regular registration form -->
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            
+            <!-- Render all fields except password help text -->
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.name == 'password1' %}
+                        <button type="button" class="password-help-btn" onclick="showPasswordHelp()">
+                            <i class="fas fa-question-circle"></i> Password Requirements
+                        </button>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- Password Help Popup -->
+        <div id="passwordHelpPopup" class="popup" style="display: none;">
+            <div class="popup-content">
+                <span class="close-btn" onclick="hidePasswordHelp()">&times;</span>
+                <h3>Password Requirements</h3>
+                <ul>
+                    <li>Your password can't be too similar to your other personal information.</li>
+                    <li>Your password must contain at least 8 characters.</li>
+                    <li>Your password can't be a commonly used password.</li>
+                    <li>Your password can't be entirely numeric.</li>
+                </ul>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Email</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="error-text">{{ form.email.errors }}</div>
-            {% endif %}
+        <!-- OAuth Buttons -->
+        <div class="oauth-buttons" style="margin-top: 20px;">
+            <a href="{% url 'google_login' %}" class="oauth-btn" style="background: #DB4437; color: white; padding: 10px 15px; border-radius: 4px; display: inline-block; margin-right: 10px; text-decoration: none;">
+                <i class="fab fa-google"></i> Register with Google
+            </a>
+            
+            <a href="{% url 'github_login' %}" class="oauth-btn" style="background: #333; color: white; padding: 10px 15px; border-radius: 4px; display: inline-block; text-decoration: none;">
+                <i class="fab fa-github"></i> Register with GitHub
+            </a>
         </div>
 
-        <div class="form-group">
-            <label>Password</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div class="error-text">{{ form.password1.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label>Password Confirmation</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div class="error-text">{{ form.password2.errors }}</div>
-            {% endif %}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-    
-    <p class="login-link">
-        Already have an account? <a href="{% url 'users:login' %}">Login here</a>
-    </p>
+        <p style="margin-top: 20px;">
+            Already have an account? <a href="{% url 'account_login' %}">Login</a>
+        </p>
+    </div>
 </div>
+
+<style>
+    /* Popup styles for dark theme */
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .popup-content {
+        background: #2d2d2d;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        width: 90%;
+        position: relative;
+        color: #e0e0e0;
+        border: 1px solid #444;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .popup-content h3 {
+        color: #ffffff;
+        margin-top: 0;
+    }
+    
+    .popup-content ul {
+        padding-left: 20px;
+    }
+    
+    .popup-content li {
+        margin-bottom: 8px;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #aaa;
+    }
+    
+    .close-btn:hover {
+        color: #fff;
+    }
+    
+    .password-help-btn {
+        background: none;
+        border: none;
+        color: #4dabf7;
+        cursor: pointer;
+        padding: 5px 0;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    
+    .password-help-btn:hover {
+        text-decoration: underline;
+        color: #74c0fc;
+    }
+    
+    .form-field {
+        margin-bottom: 15px;
+    }
+    
+    .error {
+        color: #ff8787;
+        font-size: 0.8em;
+    }
+</style>
+
+<script>
+    function showPasswordHelp() {
+        document.getElementById('passwordHelpPopup').style.display = 'flex';
+    }
+    
+    function hidePasswordHelp() {
+        document.getElementById('passwordHelpPopup').style.display = 'none';
+    }
+    
+    // Close popup when clicking outside of it
+    window.onclick = function(event) {
+        const popup = document.getElementById('passwordHelpPopup');
+        if (event.target === popup) {
+            hidePasswordHelp();
+        }
+    }
+    
+    // Close popup with ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            hidePasswordHelp();
+        }
+    });
+</script>
 {% endblock %}

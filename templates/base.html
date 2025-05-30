@@ -5,51 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Valdemar's Blog{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ now|date:'U' }}">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
 </head>
+
 <body>
-<header class="main-header">
-    <div class="container">
-        <nav class="main-nav">
-            <a href="{% url 'blog:home' %}" class="logo">Jugans</a>
-            <div class="nav-links">
-                <a href="{% url 'blog:home' %}"><i class="fas fa-home"></i> Home</a>
-                <a href="{% url 'blog:about' %}"><i class="fas fa-user"></i> About</a>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'users:profile' %}"><i class="fas fa-user-circle"></i> Profile</a>
-                    <a href="{% url 'blog:create_post' %}"><i class="fas fa-plus"></i> New Post</a>
-                    <form action="{% url 'users:logout' %}" method="post" class="logout-form">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-link">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <a href="{% url 'users:register' %}"><i class="fas fa-user-plus"></i> Register</a>
-                {% endif %}
-                {% if user.is_staff %}
-                    <a href="{% url 'blog:post_review' %}"><i class="fas fa-check-circle"></i> Review</a>
-                {% endif %}
-            </div>
-        </nav>
-    </div>
-</header>
+    <header class="main-header">
+        <div class="container">
+            <nav class="main-nav">
+                <a href="{% url 'blog:home' %}" class="logo">
+                    <i class="fas fa-blog"></i> Jugans
+                </a>
+                <div class="nav-links">
+                    <a href="{% url 'blog:home' %}"><i class="fas fa-home"></i> Home</a>
+                    <a href="{% url 'blog:about' %}"><i class="fas fa-info-circle"></i> About</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'users:profile' %}"><i class="fas fa-user"></i> Profile</a>
+                        <a href="{% url 'blog:create_post' %}"><i class="fas fa-plus-circle"></i> New Post</a>
+                        <form action="{% url 'users:logout' %}" method="post" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="{% url 'users:register' %}"><i class="fas fa-user-plus"></i> Register</a>
+                    {% endif %}
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <main class="container">
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}">
-                        {{ message }}
-                        <button class="close-btn">&times;</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
         {% block content %}{% endblock %}
     </main>
 
@@ -59,6 +51,26 @@
         </div>
     </footer>
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggle = document.getElementById('themeToggle');
+        const icon = themeToggle.querySelector('i');
+        
+        // Check for saved preference or system preference
+        const currentTheme = localStorage.getItem('theme') || 
+                            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply initial theme
+        document.body.classList.toggle('dark-theme', currentTheme === 'dark');
+        icon.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        // Toggle theme on click
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        });
+    });
+    </script>
 </body>
 </html>

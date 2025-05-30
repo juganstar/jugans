@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block title %}About Me{% endblock %}
@@ -8,65 +7,508 @@
 <section class="about-section">
     <div class="about-container">
         <div class="about-header">
-            <h1>About Me & This Project</h1>
-            </div>
+            <h1>About Jugans</h1>
+            <div class="header-accent"></div>
         </div>
 
         <div class="about-content">
-            <p class="intro">Hello! I'm <span class="highlight">Valdemar Santos</span>, a passionate developer who loves building things with code.</p>
-            
-            <div class="about-card">
-                <h2><i class="fas fa-code"></i> The Project</h2>
-                <p>This blog represents my journey into Django web development. What started as a learning project has become a fully functional blog platform.</p>
-                <p>Every expert was once a beginner, and this is my first step toward mastering web development.</p>
+            <div class="profile-intro">
+                <div class="intro-text">
+                    <div class="intro-header">
+                        <h2>Hello! I'm Valdemar Santos</h2>
+                        <div class="accent-line"></div>
+                    </div>
+                    <p class="intro-subtext">A passionate developer learning Django.</p>
+                    <p class="intro-desc">This blog represents my journey into web development, combining learning with practical implementation.</p>
+                </div>
             </div>
-
-            <div class="about-card">
-                <h2><i class="fas fa-bullseye"></i> Why I Built This</h2>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check-circle"></i> To master Django framework and Python backend development</li>
-                    <li><i class="fas fa-check-circle"></i> To understand how web servers and databases interact</li>
-                    <li><i class="fas fa-check-circle"></i> To create something real while improving my skills</li>
+            
+            <div class="about-card card-hover">
+                <h2><i class="fas fa-code"></i> About This Project</h2>
+                <p>A Django-powered blog created as my first major project, designed to:</p>
+                <ul class="styled-list">
+                    <li>Implement core web development concepts</li>
+                    <li>Showcase learning progress</li>
+                    <li>Strengthen Django fundamentals</li>
                 </ul>
             </div>
 
-            <div class="tech-stack">
-                <h2><i class="fas fa-layer-group"></i> Tech Stack</h2>
-                <div class="tech-items">
-                    <div class="tech-item">
+            <div class="about-card card-hover">
+                <h2><i class="fas fa-bullseye"></i> Project Goals</h2>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Master Django fundamentals</li>
+                    <li><i class="fas fa-check-circle"></i> Implement RESTful APIs (DRF)</li>
+                    <li><i class="fas fa-check-circle"></i> Secure authentication</li>
+                    <li><i class="fas fa-check-circle"></i> Production-ready deployment</li>
+                </ul>
+            </div>
+
+            <!-- Core Tech Stack Section -->
+            <div class="section-header">
+                <h2><i class="fas fa-layer-group"></i> Core Technology Stack</h2>
+                <p>The foundational frameworks and technologies powering this application</p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon python">
                         <i class="fab fa-python"></i>
-                        <span>Python</span>
                     </div>
-                    <div class="tech-item">
-                        <i class="fab fa-html5"></i>
-                        <span>HTML5</span>
+                    <h3>Python</h3>
+                    <p>Backend logic and server-side processing</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon django">
+                        <i class="fas fa-server"></i>
                     </div>
-                    <div class="tech-item">
-                        <i class="fab fa-css3-alt"></i>
-                        <span>CSS3</span>
+                    <h3>Django</h3>
+                    <p>Web framework and admin interface</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon drf">
+                        <i class="fas fa-plug"></i>
                     </div>
-                    <div class="tech-item">
+                    <h3>Django REST</h3>
+                    <p>API endpoints and serialization</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon postgres">
                         <i class="fas fa-database"></i>
-                        <span>PostgreSQL</span>
+                    </div>
+                    <h3>PostgreSQL</h3>
+                    <p>Relational database system</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon frontend">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>HTML5/CSS3</h3>
+                    <p>Frontend structure and styling</p>
+                </div>
+            </div>
+
+            <!-- Implementations Section -->
+            <div class="section-header">
+                <h2><i class="fas fa-tools"></i> Key Implementations</h2>
+                <p>Additional features and security measures I've implemented</p>
+            </div>
+
+            <div class="implementations-grid">
+                <div class="impl-card">
+                    <div class="impl-icon security">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="impl-content">
+                        <h3>OAuth 2.0</h3>
+                        <p>Secure authentication flows with social login integration</p>
+                    </div>
+                </div>
+                <div class="impl-card">
+                    <div class="impl-icon shield">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="impl-content">
+                        <h3>Rate Limiting</h3>
+                        <p>API request throttling to prevent abuse and DDoS attacks</p>
+                    </div>
+                </div>
+                <div class="impl-card">
+                    <div class="impl-icon filter">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <div class="impl-content">
+                        <h3>Profanity Filter</h3>
+                        <p>Automatic detection and handling of inappropriate content</p>
+                    </div>
+                </div>
+                <div class="impl-card">
+                    <div class="impl-icon" style="background: #2496ED;">
+                        <i class="fab fa-docker"></i>
+                    </div>
+                    <div class="impl-content">
+                        <h3>Dockerized</h3>
+                        <p>Containerized application for easy deployment and scalability</p>
                     </div>
                 </div>
             </div>
 
-            <div class="contact-card">
+            <div class="contact-section">
                 <h2><i class="fas fa-envelope"></i> Get In Touch</h2>
-                <div class="contact-methods">
-                    <a href="mailto:wildsmartosho@hotmail.com" class="contact-link">
-                        <i class="fas fa-envelope"></i> wildsmartosho@hotmail.com
+                <div class="contact-cards">
+                    <a href="mailto:valdemarnoivo@hotmail.com" class="contact-card card-hover">
+                        <div class="contact-icon email">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Me</h3>
+                        <p>valdemarnoivo@hotmail.com</p>
                     </a>
-                    <a href="https://github.com/yjagantaa" target="_blank" class="contact-link">
-                        <i class="fab fa-github"></i> github.com/yjagantaa
+                    
+                    <a href="https://github.com/juganstar" target="_blank" class="contact-card card-hover">
+                        <div class="contact-icon github">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <h3>GitHub</h3>
+                        <p>View my projects</p>
                     </a>
-                    <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-link">
-                        <i class="fab fa-linkedin"></i> Connect on LinkedIn
+                    
+                    <a href="https://www.linkedin.com/in/valdemar-santos-0431a0364/" target="_blank" class="contact-card card-hover">
+                        <div class="contact-icon linkedin">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <h3>LinkedIn</h3>
+                        <p>Professional profile</p>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    /* About Section Styles */
+    .about-section {
+        padding: 3rem 0;
+        background-color: var(--bg);
+    }
+
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    .about-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .about-header h1 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .header-accent {
+        width: 80px;
+        height: 4px;
+        background: var(--primary);
+        margin: 0 auto;
+        border-radius: 2px;
+    }
+
+    /* Profile Intro */
+    .profile-intro {
+        margin-bottom: 3rem;
+    }
+
+    .intro-header {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+    
+    .intro-header h2 {
+        color: var(--primary);
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .accent-line {
+        width: 50px;
+        height: 3px;
+        background: var(--primary);
+        opacity: 0.7;
+    }
+    
+    .intro-subtext {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+    }
+    
+    .intro-desc {
+        line-height: 1.7;
+        color: var(--text);
+    }
+
+    /* Cards */
+    .about-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+    }
+
+    .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+        border-color: rgba(37, 99, 235, 0.2);
+    }
+
+    .about-card h2 {
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+    }
+
+    .styled-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .styled-list li {
+        padding: 0.5rem 0;
+        position: relative;
+        padding-left: 1.75rem;
+        line-height: 1.6;
+    }
+
+    .styled-list li:before {
+        content: "•";
+        color: var(--primary);
+        position: absolute;
+        left: 0;
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+
+    .feature-list {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .feature-list li {
+        padding: 0.75rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        line-height: 1.6;
+    }
+
+    .feature-list i {
+        color: var(--accent);
+        font-size: 1.1rem;
+    }
+
+    /* Section Headers */
+    .section-header {
+        margin: 3rem 0 1.5rem;
+        text-align: center;
+    }
+
+    .section-header h2 {
+        font-size: 1.8rem;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .section-header p {
+        color: var(--text-light);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Tech Stack Grid */
+    .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .tech-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 2rem 1.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .tech-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--primary);
+    }
+
+    .tech-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+    }
+
+    .tech-icon.python { background: #3776AB; }
+    .tech-icon.django { background: #092E20; }
+    .tech-icon.drf { background: #A30000; }
+    .tech-icon.postgres { background: #336791; }
+    .tech-icon.frontend { background: #E44D26; }
+
+    .tech-card h3 {
+        margin: 0.5rem 0 1rem;
+        color: var(--text);
+        font-size: 1.25rem;
+    }
+
+    .tech-card p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Implementations Grid */
+    .implementations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .impl-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .impl-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--accent);
+    }
+
+    .impl-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .impl-icon.security { background: #10B981; }
+    .impl-icon.shield { background: #3B82F6; }
+    .impl-icon.filter { background: #7C3AED; }
+
+    .impl-content h3 {
+        margin: 0 0 0.5rem;
+        color: var(--text);
+        font-size: 1.2rem;
+    }
+
+    .impl-content p {
+        color: var(--text-light);
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* Contact Section */
+    .contact-section {
+        margin-top: 4rem;
+    }
+
+    .contact-section h2 {
+        text-align: center;
+        font-size: 1.8rem;
+        color: var(--primary);
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .contact-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .contact-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 2rem;
+        text-align: center;
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.3s ease;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+    }
+
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .contact-icon.email { background: #D44638; }
+    .contact-icon.github { background: #333; }
+    .contact-icon.linkedin { background: #0077B5; }
+
+    .contact-card h3 {
+        margin: 0.5rem 0;
+        font-size: 1.25rem;
+    }
+
+    .contact-card p {
+        margin: 0;
+        color: var(--text-light);
+        font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .tech-grid,
+        .implementations-grid,
+        .contact-cards {
+            grid-template-columns: 1fr;
+        }
+        
+        .about-card {
+            padding: 1.5rem;
+        }
+    }
+</style>
 {% endblock %}

@@ -1,62 +1,318 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="profile-update-container">
-    <h2>Update Your Profile</h2>
+<div class="profile-container">
+    <div class="profile-header">
+        <h2><i class="fas fa-user-edit"></i> Update Your Profile</h2>
+        <p class="profile-subtitle">Keep your information up to date</p>
+    </div>
     
     {% if messages %}
-    <div class="messages">
+    <div class="profile-messages">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
             {{ message }}
         </div>
         {% endfor %}
     </div>
     {% endif %}
 
-    <form method="post" class="profile-form">
+    <form method="post" class="profile-form" enctype="multipart/form-data">
         {% csrf_token %}
         
-        <div class="form-section">
-            <h3>Account Information</h3>
-            <div class="form-group">
-                <label>{{ user_form.username.label }}</label>
-                {{ user_form.username }}
+        <div class="form-sections">
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h3>Account Information</h3>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>{{ user_form.username.label }}</label>
+                        {{ user_form.username }}
+                        {% if user_form.username.errors %}
+                        <div class="form-error">{{ user_form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ user_form.email.label }}</label>
+                        {{ user_form.email }}
+                        {% if user_form.email.errors %}
+                        <div class="form-error">{{ user_form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>{{ user_form.email.label }}</label>
-                {{ user_form.email }}
-            </div>
-        </div>
 
-        <div class="form-section">
-            <h3>Personal Details</h3>
-            <div class="form-group">
-                <label>{{ user_form.first_name.label }}</label>
-                {{ user_form.first_name }}
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Personal Details</h3>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>{{ user_form.first_name.label }}</label>
+                        {{ user_form.first_name }}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ user_form.last_name.label }}</label>
+                        {{ user_form.last_name }}
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>{{ user_form.last_name.label }}</label>
-                {{ user_form.last_name }}
-            </div>
-        </div>
 
-        <div class="form-section">
-            <h3>Contact Information</h3>
-            <div class="form-group">
-                <label>{{ profile_form.phone_number.label }}</label>
-                {{ profile_form.phone_number }}
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-address-book"></i>
+                    <h3>Contact Information</h3>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>{{ profile_form.phone_number.label }}</label>
+                        {{ profile_form.phone_number }}
+                        {% if profile_form.phone_number.errors %}
+                        <div class="form-error">{{ profile_form.phone_number.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ profile_form.bio.label }}</label>
+                        {{ profile_form.bio }}
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label>{{ profile_form.bio.label }}</label>
-                {{ profile_form.bio }}
+
+            {% if profile_form.profile_picture %}
+            <div class="form-section">
+                <div class="section-header">
+                    <i class="fas fa-camera"></i>
+                    <h3>Profile Picture</h3>
+                </div>
+                <div class="form-group profile-picture-group">
+                    <div class="current-picture">
+                        {% if user.profile.profile_picture %}
+                            <img src="{{ user.profile.profile_picture.url }}" alt="Current profile picture" class="profile-thumbnail">
+                        {% else %}
+                            <div class="default-thumbnail">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="picture-upload">
+                        <label>{{ profile_form.profile_picture.label }}</label>
+                        {{ profile_form.profile_picture }}
+                    </div>
+                </div>
             </div>
+            {% endif %}
         </div>
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a href="{% url 'blog:home' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+            <a href="{% url 'users:profile' %}" class="btn btn-outline">
+                <i class="fas fa-times"></i> Cancel
+            </a>
         </div>
     </form>
 </div>
+
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .profile-header h2 {
+        font-size: 1.8rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-subtitle {
+        color: var(--text-light);
+        font-size: 0.95rem;
+    }
+
+    .profile-messages {
+        margin-bottom: 2rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .alert-success {
+        background-color: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--accent);
+        color: var(--text);
+    }
+
+    .alert-error {
+        background-color: rgba(220, 38, 38, 0.1);
+        border-left: 4px solid #dc2626;
+        color: var(--text);
+    }
+
+    .form-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .form-section {
+        background: rgba(245, 245, 245, 0.1);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        border: 1px solid var(--border);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+    }
+
+    .section-header h3 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    label {
+        font-weight: 500;
+        color: var(--text);
+        font-size: 0.95rem;
+    }
+
+    input, textarea, select {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background: var(--card);
+        color: var(--text);
+    }
+
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: flex-end;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+    }
+
+    .form-error {
+        color: #dc2626;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .profile-picture-group {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .current-picture {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .default-thumbnail {
+        font-size: 2rem;
+        color: var(--text-light);
+    }
+
+    .picture-upload {
+        flex: 1;
+    }
+
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 1.5rem;
+        }
+        
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .profile-picture-group {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .form-actions {
+            justify-content: center;
+        }
+    }
+</style>
 {% endblock %}

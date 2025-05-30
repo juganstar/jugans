@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 from django.contrib.auth import views as auth_views
 from .views import about_view
@@ -27,4 +27,5 @@ urlpatterns = [
          name='password_reset_complete'),
      path('search/', views.search, name='search'),
      path('about/', about_view, name='about'),
+     path('accounts/', include('allauth.urls')),
 ]
