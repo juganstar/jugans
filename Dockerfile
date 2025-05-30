@@ -1,6 +1,8 @@
 FROM python:3.11-slim
 
-# Install system dependencies
+ENV DJANGO_SETTINGS_MODULE=config.settings
+ENV PYTHONPATH="/app"
+
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
@@ -8,19 +10,13 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Install requirements first (caching optimization)
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
-# Set Django settings module (important for Docker containers)
-ENV DJANGO_SETTINGS_MODULE=config.settings
+RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate
 
-# Entrypoint
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-# Add this for production
-CMD ["gunicorn", "config.wsgi:application.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
